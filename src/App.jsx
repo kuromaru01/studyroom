@@ -15,9 +15,13 @@ function App() {
   }
 
   return (
-    <>
-      {isLoggedIn ? <Dashboard onLogout={handleLogout} /> : <LoginScreen onLogin={handleLogin} />}
-    </>
+    <div className="min-h-screen bg-gray-50 text-gray-800">
+      {isLoggedIn ? (
+        <Dashboard onLogout={handleLogout} />
+      ) : (
+        <LoginScreen onLogin={handleLogin} />
+      )}
+    </div>
   )
 }
 

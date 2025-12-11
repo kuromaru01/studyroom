@@ -9,14 +9,18 @@ export default function Dashboard({ onLogout }) {
           <div className="flex items-center gap-2">
             <h1 className="text-xl font-bold text-gray-900">Study Room</h1>
           </div>
+
           <div className="flex items-center gap-4">
             <span className="text-gray-700">ようこそ、ゲストさん</span>
-            <button 
+
+            <button
               onClick={onLogout}
-              className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors">
+              className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors"
+            >
               <LogOut size={18} />
               <span>退室</span>
             </button>
+
           </div>
         </div>
       </header>
@@ -24,6 +28,7 @@ export default function Dashboard({ onLogout }) {
       {/* メインエリア */}
       <main className="max-w-7xl mx-auto px-6 py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
           {/* 現在のステータスカード */}
           <div className="bg-white rounded-lg shadow-md p-8">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">現在のステータス</h2>
@@ -43,14 +48,12 @@ export default function Dashboard({ onLogout }) {
             <div className="flex items-center justify-center h-40">
               <div className="text-center">
                 <p className="text-gray-500 text-lg">タスクはまだありません</p>
-                <button className="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors">
-                  タスクを追加
-                </button>
               </div>
             </div>
           </div>
+
         </div>
       </main>
     </div>
-  );
+  )
 }
