@@ -1,11 +1,11 @@
 import { useState } from 'react'
 
-export default function LoginScreen({ onLogin }) {
+export default function LoginScreen({ onLogin, error }) {
   const [nickname, setNickname] = useState('')
 
   const handleEnter = () => {
-    if (!nickname) return
-    onLogin(nickname)
+    if (!nickname.trim()) return
+    onLogin(nickname.trim())
   }
 
   return (
@@ -44,6 +44,9 @@ export default function LoginScreen({ onLogin }) {
               onChange={(e) => setNickname(e.target.value)}
               className="input-field"
             />
+            {error && (
+              <p className="text-red-500 text-sm mt-2">{error}</p>
+            )}
           </div>
 
           {/* 入室するボタン */}
