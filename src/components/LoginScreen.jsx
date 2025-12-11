@@ -20,26 +20,33 @@ export default function LoginScreen() {
           日々の学習を記録し、仲間と共有しよう
         </p>
 
-        {/* ニックネーム入力欄 */}
-        <div className="mb-6">
-          <label htmlFor="nickname" className="block text-sm font-medium text-gray-700 mb-2">
-            ニックネーム
-          </label>
-          <input
-            id="nickname"
-            type="text"
-            placeholder="あなたのニックネームを入力"
-            className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-600 transition-colors text-gray-900 placeholder-gray-400"
-          />
+        {/* フォームコンテナ */}
+        <div className="flex flex-col items-center">
+          {/* ニックネーム入力欄 */}
+          <div className="mb-6" style={{ width: '280px', maxWidth: '280px' }}>
+            <label htmlFor="nickname" className="block text-sm font-medium text-gray-700 mb-2">
+              ニックネーム
+            </label>
+            <input
+              id="nickname"
+              type="text"
+              placeholder="あなたのニックネームを入力"
+              className="px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-600 transition-colors text-gray-900 placeholder-gray-400"
+              style={{ width: '280px', maxWidth: '280px', boxSizing: 'border-box' }}
+            />
+          </div>
+
+          {/* 入室するボタン */}
+          <button 
+            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-md hover:shadow-lg"
+            style={{ width: '280px', maxWidth: '280px', boxSizing: 'border-box' }}
+          >
+            入室する
+          </button>
         </div>
 
-        {/* 入室するボタン */}
-        <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition-all duration-200 transform hover:scale-105 active:scale-95">
-          入室する
-        </button>
-
         {/* フッター */}
-        <p className="text-center text-gray-500 text-sm mt-6">
+        <p className="text-center text-gray-500 text-sm mt-8">
           アカウントがなくても、ニックネームで参加できます
         </p>
       </div>
