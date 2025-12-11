@@ -1,14 +1,17 @@
 import LoginScreen from './components/LoginScreen'
 import Dashboard from './components/Dashboard'
-import './App.css'
-
-// この変数を true/false に書き換えて画面を確認します
-const isDebugLogin = false
+import { useState } from 'react'
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+  const handleLogin = () => {
+    setIsLoggedIn(true)
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 text-gray-800">
-      {isDebugLogin ? <Dashboard /> : <LoginScreen />}
+      {isLoggedIn ? <Dashboard /> : <LoginScreen onLogin={handleLogin} />}
     </div>
   )
 }
