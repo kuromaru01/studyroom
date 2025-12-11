@@ -5,7 +5,7 @@ export default function LoginScreen({ onLogin }) {
 
   const handleEnter = () => {
     if (!nickname) return
-    onLogin()
+    onLogin(nickname)
   }
 
   return (

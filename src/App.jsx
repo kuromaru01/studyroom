@@ -5,23 +5,33 @@ import './App.css'
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [currentNickname, setCurrentNickname] = useState('')
+  const [members, setMembers] = useState([])
 
-  const handleLogin = () => {
+  const handleLogin = (nickname) => {
+    setCurrentNickname(nickname)
+    setMembers([...members, nickname])
     setIsLoggedIn(true)
   }
 
   const handleLogout = () => {
+    setMembers(members.filter(member => member !== currentNickname))
+    setCurrentNickname('')
     setIsLoggedIn(false)
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-800">
+    <>
       {isLoggedIn ? (
-        <Dashboard onLogout={handleLogout} />
+        <Dashboard 
+          onLogout={handleLogout} 
+          nickname={currentNickname}
+          members={members}
+        />
       ) : (
         <LoginScreen onLogin={handleLogin} />
       )}
-    </div>
+    </>
   )
 }
 
