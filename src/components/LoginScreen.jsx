@@ -1,4 +1,13 @@
-export default function LoginScreen() {
+import { useState } from 'react'
+
+export default function LoginScreen({ onLogin }) {
+  const [nickname, setNickname] = useState('')
+
+  const handleEnter = () => {
+    if (!nickname) return
+    onLogin()
+  }
+
   return (
     <div className="login-container">
       {/* 背景のドット柄パターン */}
@@ -31,12 +40,15 @@ export default function LoginScreen() {
               id="nickname"
               type="text"
               placeholder="あなたのニックネームを入力"
+              value={nickname}
+              onChange={(e) => setNickname(e.target.value)}
               className="input-field"
             />
           </div>
 
           {/* 入室するボタン */}
           <button 
+            onClick={handleEnter}
             className="submit-button"
           >
             入室する
@@ -49,5 +61,5 @@ export default function LoginScreen() {
         </p>
       </div>
     </div>
-  );
+  )
 }
