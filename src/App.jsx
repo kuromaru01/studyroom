@@ -9,9 +9,17 @@ function App() {
     setIsLoggedIn(true)
   }
 
+  const handleLogout = () => {
+    setIsLoggedIn(false)
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 text-gray-800">
-      {isLoggedIn ? <Dashboard /> : <LoginScreen onLogin={handleLogin} />}
+      {isLoggedIn ? (
+        <Dashboard onLogout={handleLogout} />
+      ) : (
+        <LoginScreen onLogin={handleLogin} />
+      )}
     </div>
   )
 }
