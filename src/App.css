@@ -1,1 +1,297 @@
-/* App.css は Tailwind CSS で処理するため空のままにします */
+/* ===== グラデーション背景アニメーション ===== */
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(59, 130, 246, 0.8);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+/* ===== ログイン画面コンテナ ===== */
+.login-container {
+  min-height: 100vh;
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ===== バックグラウンド装飾要素 ===== */
+.background-circles {
+  position: absolute;
+  inset: 0;
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+.circle {
+  position: absolute;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+}
+
+.circle-1 {
+  width: 300px;
+  height: 300px;
+  top: -100px;
+  left: -100px;
+  animation: float 8s ease-in-out infinite;
+}
+
+.circle-2 {
+  width: 200px;
+  height: 200px;
+  bottom: -50px;
+  right: -50px;
+  animation: float 10s ease-in-out infinite 2s;
+}
+
+.circle-3 {
+  width: 150px;
+  height: 150px;
+  top: 50%;
+  right: 10%;
+  animation: float 12s ease-in-out infinite 4s;
+}
+
+/* ===== ログインカード ===== */
+.login-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 25px;
+  padding: 50px 40px;
+  max-width: 420px;
+  width: 100%;
+  margin: 0 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 10;
+  animation: slideInUp 0.8s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* ===== ロゴセクション ===== */
+.logo-section {
+  text-align: center;
+  margin-bottom: 35px;
+}
+
+.logo-title {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0;
+  letter-spacing: -0.5px;
+  animation: slideInUp 0.8s ease 0.1s both;
+}
+
+.subtitle {
+  color: #6b7280;
+  font-size: 16px;
+  margin-top: 15px;
+  line-height: 1.6;
+  animation: slideInUp 0.8s ease 0.2s both;
+}
+
+/* ===== フォーム入力欄 ===== */
+.input-group {
+  margin-bottom: 25px;
+  animation: slideInUp 0.8s ease 0.3s both;
+}
+
+.input-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.input-field {
+  width: 100%;
+  padding: 14px 18px;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 15px;
+  color: #1f2937;
+  background-color: #f9fafb;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  font-weight: 500;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: #667eea;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  transform: translateY(-2px);
+}
+
+.input-field::placeholder {
+  color: #9ca3af;
+}
+
+/* ===== ボタン ===== */
+.submit-button {
+  width: 100%;
+  padding: 15px 30px;
+  margin-top: 10px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+  animation: slideInUp 0.8s ease 0.4s forwards;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.submit-button:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.submit-button:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4), 
+              0 0 20px rgba(102, 126, 234, 0.6),
+              0 0 40px rgba(102, 126, 234, 0.3);
+}
+
+.submit-button:hover:before {
+  left: 100%;
+}
+
+.submit-button:active {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+}
+
+/* ===== フッターテキスト ===== */
+.footer-text {
+  text-align: center;
+  color: #9ca3af;
+  font-size: 13px;
+  margin-top: 30px;
+  animation: slideInUp 0.8s ease 0.5s both;
+  line-height: 1.6;
+}
+
+/* ===== レスポンシブ対応 ===== */
+@media (max-width: 640px) {
+  .login-card {
+    padding: 40px 25px;
+    border-radius: 20px;
+  }
+
+  .logo-title {
+    font-size: 36px;
+  }
+
+  .subtitle {
+    font-size: 15px;
+  }
+
+  .submit-button {
+    padding: 12px 24px;
+    font-size: 15px;
+  }
+}
+
+/* ===== ダークモード対応 ===== */
+@media (prefers-color-scheme: dark) {
+  .login-card {
+    background: rgba(31, 41, 55, 0.95);
+  }
+
+  .input-label {
+    color: #e5e7eb;
+  }
+
+  .input-field {
+    background-color: #374151;
+    border-color: #4b5563;
+    color: #f3f4f6;
+  }
+
+  .input-field:focus {
+    background-color: #1f2937;
+    border-color: #667eea;
+  }
+
+  .input-field::placeholder {
+    color: #6b7280;
+  }
+
+  .subtitle {
+    color: #d1d5db;
+  }
+
+  .footer-text {
+    color: #9ca3af;
+  }
+}
