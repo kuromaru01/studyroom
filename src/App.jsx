@@ -1,6 +1,7 @@
 import LoginScreen from './components/LoginScreen'
 import Dashboard from './components/Dashboard'
 import { useState } from 'react'
+import './App.css'
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
