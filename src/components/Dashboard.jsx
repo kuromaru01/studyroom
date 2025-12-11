@@ -48,3 +48,12 @@ export default function Dashboard({ onLogout }) {
             <div className="flex items-center justify-center h-40">
               <div className="text-center">
                 <p className="text-gray-500 text-lg">タスクはまだありません</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </main>
+    </div>
+  )
+}
