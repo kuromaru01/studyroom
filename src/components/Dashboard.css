@@ -7,7 +7,10 @@
   padding: 40px 40px;
   box-sizing: border-box;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  background: #f0f5ff; /* ページ背景を単色へ */
+  /* 背景は淡いブルー系のグラデーションをアニメーション */
+  background: linear-gradient(-45deg, #f0f5ff, #eaf2ff, #eef5ff, #e6f0ff);
+  background-size: 400% 400%;
+  animation: gradientShift 18s ease infinite;
   overflow-x: hidden;
 }
 

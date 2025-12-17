@@ -48,13 +48,16 @@ function App() {
   }, [])
 
   const handleLogin = (nickname) => {
-    if (!socket) return
-
+    // まずローカル状態を更新して画面遷移させる（ソケット未接続でも進む）
     setJoinError(null)
+    setCurrentNickname(nickname)
+    setIsLoggedIn(true)
+
+    // ソケットがあればサーバーと同期する
+    if (!socket) return
 
     let hasError = false
 
-    // エラーハンドラー（先に設定）
     const errorHandler = (errorMessage) => {
       hasError = true
       setJoinError(errorMessage)
@@ -62,28 +65,23 @@ function App() {
     }
     socket.once('joinError', errorHandler)
 
-    // メンバーリスト更新ハンドラー
     const updateHandler = (updatedMembers) => {
       if (!hasError) {
-        setCurrentNickname(nickname)
         setMembers(updatedMembers)
-        setIsLoggedIn(true)
       }
       socket.off('membersUpdate', updateHandler)
       socket.off('joinError', errorHandler)
     }
     socket.once('membersUpdate', updateHandler)
 
-    // サーバーに入室を通知
     socket.emit('join', nickname)
   }
 
   const handleLogout = () => {
-    if (!socket) return
-
-    // サーバーに退室を通知
-    socket.emit('leave')
-    
+    // ソケットがあればサーバーへ通知、なくてもローカルでログアウト
+    if (socket) {
+      socket.emit('leave')
+    }
     setCurrentNickname('')
     setMembers([])
     setIsLoggedIn(false)
