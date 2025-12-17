@@ -1,54 +1,67 @@
-import { LogOut } from 'lucide-react';
+import { useState } from 'react';
+import { LogOut, RefreshCcw } from 'lucide-react';
+import './Dashboard.css';
 
 export default function Dashboard() {
+  const [isBreak, setIsBreak] = useState(false);
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="dashboard-container">
       {/* ヘッダー */}
-      <header className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <h1 className="text-xl font-bold text-gray-900">Study Room</h1>
-          </div>
-          <div className="flex items-center gap-4">
-            <span className="text-gray-700">ようこそ、ゲストさん</span>
-            <button className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors">
-              <LogOut size={18} />
-              <span>退室</span>
-            </button>
-          </div>
+      <header className="dashboard-header">
+        {/* 幅が広くなったグラデーションボックス */}
+        <div className="header-title-box">
+          <h1 className="title-logo">Study Room</h1>
+        </div>
+        
+        <div className="user-info">
+          <span>ようこそ、ゲストさん</span>
+          <button className="logout-btn">
+            <LogOut size={16} />
+            <span>退室</span>
+          </button>
         </div>
       </header>
 
-      {/* メインエリア */}
-      <main className="max-w-7xl mx-auto px-6 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* 現在のステータスカード */}
-          <div className="bg-white rounded-lg shadow-md p-8">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">現在のステータス</h2>
-            <div className="flex items-center justify-center h-40">
-              <div className="text-center">
-                <div className="inline-block bg-blue-100 text-blue-700 px-6 py-3 rounded-full font-medium text-lg">
-                  集中モード
-                </div>
-                <p className="text-gray-600 mt-4">学習に集中中です</p>
-              </div>
-            </div>
-          </div>
+      {/* 現在のステータス */}
+      <div className="dashboard-section">
+        <div className="skew-title-box">
+          <h2 className="skew-title-text">現在のステータス</h2>
+        </div>
+        <div className="blue-underline"></div>
 
-          {/* 今日のタスクカード */}
-          <div className="bg-white rounded-lg shadow-md p-8">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">今日のタスク</h2>
-            <div className="flex items-center justify-center h-40">
-              <div className="text-center">
-                <p className="text-gray-500 text-lg">タスクはまだありません</p>
-                <button className="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors">
-                  タスクを追加
-                </button>
+        {/* 線画の括弧コンテナ（中にテキストを戻す） */}
+        <div className="bracket-container">
+          <div className="content-area">
+            <div className="status-inner">
+              <div className="flash-card" aria-live="polite">
+                <span className={isBreak ? 'flash-text out' : 'flash-text in'}>学習に集中中です</span>
+                <span className={isBreak ? 'flash-text in' : 'flash-text out'}>今は休憩中です</span>
               </div>
+              <button className="swap-btn round" aria-label="切り替え" onClick={() => setIsBreak(prev => !prev)}>
+                <RefreshCcw size={16} />
+              </button>
             </div>
           </div>
         </div>
-      </main>
+      </div>
+
+      {/* 今日のタスク */}
+      <div className="dashboard-section">
+        <div className="skew-title-box">
+          <h2 className="skew-title-text">今日のタスク</h2>
+        </div>
+        <div className="blue-underline"></div>
+
+        {/* 線画の括弧コンテナ */}
+        <div className="bracket-container">
+          <div className="content-area">
+            <div className="status-text">タスクはまだありません</div>
+            <button className="add-task-btn">add task</button>
+          </div>
+        </div>
+      </div>
+
     </div>
   );
 }

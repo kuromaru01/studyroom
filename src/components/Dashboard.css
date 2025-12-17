@@ -1,0 +1,301 @@
+/* Dashboard.css */
+
+/* コンテナ設定 */
+.dashboard-container {
+  width: 100%;
+  min-height: 100vh;
+  padding: 40px 40px;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: #f0f5ff; /* ページ背景を単色へ */
+  overflow-x: hidden;
+}
+
+/* ヘッダー */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 60px;
+  width: 100%;
+}
+
+/* ヘッダー背景 */
+.header-title-box {
+  background: linear-gradient(90deg, #0b5dff 0%, rgba(11,93,255,0.6) 55%, rgba(240,245,255,0) 100%);
+  width: 60%;
+  display: inline-block;
+  transform: skewX(-20deg);
+  padding: 10px 0 10px 44px;
+  border-left: 10px solid #0047c3;
+}
+
+.title-logo {
+  font-size: 40px;
+  font-weight: 800;
+  margin: 0;
+  transform: skewX(20deg);
+  display: inline-block;
+  letter-spacing: 0.04em;
+  font-family: "Futura", "Century Gothic", -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(180deg, #ffffff 0%, #e9f1ff 60%, #cfe0ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent; /* 背景に溶け込むように文字をグラデーションで表現 */
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 15px;
+  border: 1px solid #ccc;
+  background: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+}
+
+.logout-btn:hover {
+  background-color: #f9f9f9;
+}
+
+/* --- コンテンツエリア --- */
+
+.dashboard-section {
+  margin-bottom: 60px; /* 全体の間隔も少し詰める */
+}
+
+/* 斜めの青いタイトル背景 */
+.skew-title-box {
+  background: linear-gradient(90deg, #0b5dff 0%, #2a8cff 100%);
+  display: inline-block;
+  transform: skewX(-20deg);
+  padding: 10px 84px 10px 34px;
+  margin-bottom: 6px;
+  margin-left: 20px;
+  box-shadow: 0 6px 16px rgba(11, 93, 255, 0.2);
+}
+
+.skew-title-text {
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+  margin: 0;
+  transform: skewX(20deg);
+  display: inline-block;
+  letter-spacing: 0.05em;
+}
+
+/* タイトル下の青いライン */
+.blue-underline {
+  height: 4px;
+  width: 100%;
+  max-width: 440px;
+  background: linear-gradient(90deg, #0b5dff 0%, #2a8cff 100%);
+  transform: skewX(-20deg);
+  margin-left: 25px;
+  margin-bottom: 22px;
+  position: relative;
+  overflow: hidden;
+}
+
+.blue-underline::after {
+  content: '';
+  position: absolute;
+  left: -80px;
+  top: 0;
+  height: 100%;
+  width: 80px;
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 50%, rgba(255,255,255,0) 100%);
+  animation: shimmer 2.4s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(520px); }
+}
+
+/* --- 括弧〔 〕のデザイン変更 --- */
+.bracket-container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 12px 34px;
+  margin-left: 60px;
+}
+
+/* 左の括弧 〔 */
+.bracket-container::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%); /* 回転させず、位置だけ中央に */
+  
+  width: 15px;  /* 幅 */
+  height: 50px; /* 高さ：文字を包むように少し高く */
+  
+  /* コの字型に線を描く */
+  border-top: 4px solid #0b5dff;
+  border-bottom: 4px solid #0b5dff;
+  border-left: 4px solid #0b5dff;
+  
+  /* 角を丸くして〔 の形にする */
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+/* 右の括弧 〕 */
+.bracket-container::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  
+  width: 15px;
+  height: 50px;
+  
+  /* 逆コの字型に線を描く */
+  border-top: 4px solid #0b5dff;
+  border-bottom: 4px solid #0b5dff;
+  border-right: 4px solid #0b5dff;
+  
+  /* 角を丸くして 〕 の形にする */
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+/* --------------------------- */
+
+/* テキストエリア */
+.content-area {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+/* ステータス内の横並びコンテナ */
+.status-inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.status-label {
+  font-weight: bold;
+  font-size: 22px;
+  color: #222;
+  line-height: 1.2; /* 行間を少しタイトに */
+}
+
+.status-text {
+  font-size: 18px;
+  color: #444;
+}
+
+/* ステータス行（ラベル＋フラッシュカード） */
+/* 以前のステータス行は不要のため削除 */
+
+/* フラッシュカード領域 */
+.flash-card {
+  position: relative;
+  width: 240px;
+  height: 36px;
+  overflow: hidden;
+}
+
+.flash-text {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  color: #0b5dff;
+  font-weight: 700;
+  font-size: 22px;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.flash-text.in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.flash-text.out {
+  opacity: 0;
+  transform: translateY(100%);
+}
+
+/* 交換ボタン */
+.swap-btn {
+  padding: 6px 16px;
+  border: 1px solid #a7b7ff;
+  background-color: #f0f5ff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+  margin-top: 4px;
+}
+
+.swap-btn.round {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0; /* 右側配置のため余白はstatus-innerのgapに任せる */
+  box-shadow: 0 6px 12px rgba(11, 93, 255, 0.18);
+}
+
+.swap-btn:hover {
+  background-color: #e9f1ff;
+  transform: translateY(-1px);
+}
+
+.swap-btn.round:hover {
+  border-color: #2a8cff;
+  background-color: #e9f1ff;
+}
+
+/* 小さなポップアニメ（入れ替え時に軽く弾む） */
+.flash-card:active {
+  animation: pop 220ms ease;
+}
+
+@keyframes pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+.add-task-btn {
+  padding: 8px 18px;
+  border: 1px solid #a7b7ff;
+  background: linear-gradient(180deg, #f3f7ff 0%, #e9f1ff 100%);
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 8px;
+  font-size: 14px;
+  color: #0b5dff;
+  font-weight: 600;
+  box-shadow: 0 6px 12px rgba(11, 93, 255, 0.14);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.add-task-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 16px rgba(11, 93, 255, 0.18);
+}
