@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { LogOut, RefreshCcw } from 'lucide-react';
 import './Dashboard.css';
 
-export default function Dashboard() {
+export default function Dashboard({ onLogout, nickname = 'ゲスト' }) {
   const [isBreak, setIsBreak] = useState(false);
 
   return (
@@ -15,8 +15,8 @@ export default function Dashboard() {
         </div>
         
         <div className="user-info">
-          <span>ようこそ、ゲストさん</span>
-          <button className="logout-btn">
+          <span>ようこそ、{nickname}さん</span>
+          <button className="logout-btn" onClick={onLogout}>
             <LogOut size={16} />
             <span>退室</span>
           </button>
