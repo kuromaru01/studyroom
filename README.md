@@ -10,3 +10,7 @@
 在室メンバー表示  
 ステータス表示  
 Todoリスト  
+
+起動方法(別ターミナルで)  
+npm run dev  
+npm run server  

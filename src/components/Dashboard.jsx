@@ -2,18 +2,17 @@ import { useState } from 'react';
 import { LogOut, RefreshCcw } from 'lucide-react';
 import './Dashboard.css';
 
-export default function Dashboard({ onLogout, nickname = 'ゲスト' }) {
+export default function Dashboard({ onLogout, nickname = 'ゲスト', members = [] }) {
   const [isBreak, setIsBreak] = useState(false);
 
   return (
     <div className="dashboard-container">
-      {/* ヘッダー */}
+      {/* ヘッダー（デザイン優先） */}
       <header className="dashboard-header">
-        {/* 幅が広くなったグラデーションボックス */}
         <div className="header-title-box">
           <h1 className="title-logo">Study Room</h1>
         </div>
-        
+
         <div className="user-info">
           <span>ようこそ、{nickname}さん</span>
           <button className="logout-btn" onClick={onLogout}>
@@ -30,7 +29,6 @@ export default function Dashboard({ onLogout, nickname = 'ゲスト' }) {
         </div>
         <div className="blue-underline"></div>
 
-        {/* 線画の括弧コンテナ（中にテキストを戻す） */}
         <div className="bracket-container">
           <div className="content-area">
             <div className="status-inner">
@@ -53,7 +51,6 @@ export default function Dashboard({ onLogout, nickname = 'ゲスト' }) {
         </div>
         <div className="blue-underline"></div>
 
-        {/* 線画の括弧コンテナ */}
         <div className="bracket-container">
           <div className="content-area">
             <div className="status-text">タスクはまだありません</div>
