@@ -12,6 +12,7 @@
   background-size: 400% 400%;
   animation: gradientShift 18s ease infinite;
   overflow-x: hidden;
+  position: relative; /* フローティング時計の基準 */
 }
 
 /* ヘッダー */
@@ -51,6 +52,157 @@
   display: flex;
   align-items: center;
   gap: 15px;
+}
+
+/* 右側フローティング時計 */
+.floating-clock {
+  position: fixed; /* スクロール追従 */
+  right: 60px;
+  top: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 18px 22px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.7), rgba(233,241,255,0.7));
+  border: 1px solid rgba(11,93,255,0.25);
+  box-shadow: 0 18px 40px rgba(11, 93, 255, 0.18);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 2;
+}
+
+.clock-time {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-weight: 800;
+  font-size: 96px;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+  background: linear-gradient(180deg, #0b5dff 0%, #2a8cff 60%, #4aa3ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 8px 20px rgba(11,93,255,0.25);
+}
+
+.clock-date {
+  font-size: 16px;
+  color: #2856b8;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 1200px) {
+  .clock-time { font-size: 72px; }
+  .floating-clock { right: 32px; top: 160px; }
+}
+
+@media (max-width: 840px) {
+  .clock-time { font-size: 56px; }
+  .floating-clock { right: 16px; top: 120px; padding: 14px 16px; }
+}
+
+/* 切替ボタン（右上固定） */
+.clock-toggle-btn {
+  position: fixed;
+  top: 16px;
+  right: 20px;
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid #a7b7ff;
+  background: linear-gradient(180deg, #f3f7ff 0%, #e9f1ff 100%);
+  color: #0b5dff;
+  cursor: pointer;
+  box-shadow: 0 8px 16px rgba(11,93,255,0.15);
+  z-index: 3;
+}
+.clock-toggle-btn:hover { transform: translateY(-1px); border-color: #2a8cff; }
+
+/* アナログ時計 */
+.analog-clock { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+.analog-dial {
+  position: relative;
+  width: 320px;
+  height: 320px;
+  --radius: 138px; /* 数字配置用の半径（中心からの距離） */
+  --tick-radius: 156px; /* 目盛の半径（外周の内側） */
+  --tick-angle-offset: -2deg; /* わずかなズレを補正 */
+  border-radius: 50%;
+  background: radial-gradient(120% 120% at 30% 20%, #ffffff 0%, #eef4ff 70%, #dde9ff 100%);
+  /* 枠線・内側ハイライトを削除してフラットに */
+  box-shadow: 0 24px 40px rgba(11,93,255,0.18);
+}
+
+/* 目盛りリングを非表示にして枠感をなくす */
+.analog-dial::before, .analog-dial::after { content: none; }
+
+.hand {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform-origin: 50% 100%;
+  border-radius: 10px;
+}
+.hand.hour { width: 8px; height: 95px; background: linear-gradient(180deg, #2a8cff, #0b5dff); box-shadow: 0 2px 8px rgba(11,93,255,0.25); }
+.hand.minute { width: 6px; height: 140px; background: linear-gradient(180deg, #5ea3ff, #2a8cff); box-shadow: 0 2px 8px rgba(11,93,255,0.20); }
+.hand.second { width: 2px; height: 152px; background: #ff3b30; box-shadow: 0 2px 8px rgba(255,59,48,0.25); }
+.center-dot { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 12px; height: 12px; border-radius: 50%; background: #0b5dff; box-shadow: 0 0 0 3px #ffffff; }
+
+/* 目盛（60分） */
+.tick {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  /* 先端（外側）を円周に合わせ、内側へ伸びる */
+  transform: translate(-50%, -50%) rotate(calc(var(--angle) + var(--tick-angle-offset))) translateY(calc(-1 * var(--tick-radius)));
+  transform-origin: 50% 0%;
+  background: #2a8cff;
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(42,140,255,0.35);
+}
+.tick.minor { width: 2px; height: 8px; opacity: 0.85; }
+.tick.major { width: 4px; height: 16px; opacity: 0.95; }
+
+/* 数字（1〜12） */
+.analog-number {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 18px;
+  color: #1946a8;
+  text-shadow: 0 2px 6px rgba(11,93,255,0.15);
+  transform: translate(-50%, -50%) rotate(var(--angle)) translateY(calc(-1 * var(--radius))) rotate(calc(-1 * var(--angle)));
+  user-select: none;
+}
+
+@media (max-width: 1200px) {
+  .analog-dial { width: 280px; height: 280px; --radius: 126px; --tick-radius: 138px; --tick-angle-offset: -2deg; }
+  .tick.minor { height: 6px; }
+  .tick.major { height: 12px; }
+  .hand.hour { height: 84px; }
+  .hand.minute { height: 124px; }
+  .hand.second { height: 136px; }
+}
+
+@media (max-width: 840px) {
+  .analog-dial { width: 240px; height: 240px; --radius: 110px; --tick-radius: 118px; --tick-angle-offset: -2deg; }
+  .tick.minor { height: 5px; }
+  .tick.major { height: 10px; }
+  .hand.hour { height: 70px; }
+  .hand.minute { height: 100px; }
+  .hand.second { height: 116px; }
 }
 
 .logout-btn {

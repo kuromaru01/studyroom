@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { LogOut, RefreshCcw, Trash2 } from 'lucide-react';
 import './Dashboard.css';
 
@@ -9,6 +9,13 @@ export default function Dashboard({ onLogout, nickname = 'ゲスト', members = 
   const [taskDeadline, setTaskDeadline] = useState('');
   const [taskMemo, setTaskMemo] = useState('');
   const [showTaskForm, setShowTaskForm] = useState(false);
+  const [now, setNow] = useState(new Date());
+  const [isDigital, setIsDigital] = useState(true);
+
+  useEffect(() => {
+    const timer = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   const addTask = () => {
     if (taskInput.trim() === '') return;
@@ -48,6 +55,56 @@ export default function Dashboard({ onLogout, nickname = 'ゲスト', members = 
           </button>
         </div>
       </header>
+
+      {/* 右上トグルボタン（固定） */}
+      <button
+        className="clock-toggle-btn"
+        onClick={() => setIsDigital(v => !v)}
+        aria-pressed={isDigital}
+        title="アナログ/デジタル切替"
+      >
+        <RefreshCcw size={16} />
+      </button>
+
+      {/* 右側フローティング時計（固定） */}
+      <div className="floating-clock" role="timer" aria-live="polite">
+        {isDigital ? (
+          <>
+            <div className="clock-time">{now.toLocaleTimeString('ja-JP', { hour12: false })}</div>
+            <div className="clock-date">{now.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'short' })}</div>
+          </>
+        ) : (
+          <div className="analog-clock" aria-label="アナログ時計">
+            <div className="analog-dial">
+              {[...Array(12)].map((_, i) => {
+                const n = i + 1;
+                const angle = n * 30;
+                return (
+                  <div key={n} className="analog-number" style={{ '--angle': `${angle}deg` }}>
+                    {n}
+                  </div>
+                );
+              })}
+              <div
+                className="hand hour"
+                style={{ transform: `translate(-50%, -100%) rotate(${(now.getHours() % 12) * 30 + now.getMinutes() * 0.5}deg)` }}
+              />
+              <div
+                className="hand minute"
+                style={{ transform: `translate(-50%, -100%) rotate(${now.getMinutes() * 6 + now.getSeconds() * 0.1}deg)` }}
+              />
+              <div
+                className="hand second"
+                style={{ transform: `translate(-50%, -100%) rotate(${now.getSeconds() * 6}deg)` }}
+              />
+              <div className="center-dot" />
+            </div>
+            <div className="clock-date small">
+              {now.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'short' })}
+            </div>
+          </div>
+        )}
+      </div>
 
       {/* 現在のステータス */}
       <div className="dashboard-section">
