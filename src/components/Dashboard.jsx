@@ -1,4 +1,4 @@
-import { LogOut, Users, User } from 'lucide-react';
+import { LogOut, Users, User, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 
 export default function Dashboard({ onLogout, nickname, members, room }) {
@@ -22,6 +22,10 @@ export default function Dashboard({ onLogout, nickname, members, room }) {
     setTaskInput('');
     setTaskDeadline('');
     setTaskMemo('');
+  };
+
+  const deleteTask = (id) => {
+    setTasks(tasks.filter(task => task.id !== id));
   };
 
   return (
@@ -143,7 +147,14 @@ export default function Dashboard({ onLogout, nickname, members, room }) {
                   className="border-2 border-blue-200 bg-blue-50 rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow"
                 >
                   <div className="flex justify-between items-start mb-2">
-                    <span className="font-medium text-gray-900">{task.text}</span>
+                    <span className="font-medium text-gray-900 flex-1">{task.text}</span>
+                    <button
+                      onClick={() => deleteTask(task.id)}
+                      className="ml-2 p-1.5 text-red-600 hover:bg-red-100 rounded-lg transition-colors"
+                      title="削除"
+                    >
+                      <Trash2 size={16} />
+                    </button>
                   </div>
                   {task.deadline && (
                     <div className="flex items-center gap-2 mb-2">
