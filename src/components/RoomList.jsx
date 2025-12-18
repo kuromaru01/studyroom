@@ -43,36 +43,42 @@ export default function RoomList({ socket, nickname, onJoinRoom }) {
 
     setError(null);
 
-    socket.emit('createRoom', {
-      name: roomName,
-      description: roomDescription
-    });
+    // エラーハンドラーを先に設定
+    const errorHandler = (errorMessage) => {
+      setError(errorMessage);
+      socket.off('roomCreated', successHandler);
+    };
+    socket.once('createRoomError', errorHandler);
 
-    socket.once('roomCreated', (room) => {
+    // 成功ハンドラー
+    const successHandler = (room) => {
       setRoomName('');
       setRoomDescription('');
       setShowCreateForm(false);
+      socket.off('createRoomError', errorHandler);
       // 作成したルームに入室
+      console.log('ルーム作成成功、入室処理を開始:', room.id);
       handleJoinRoom(room.id);
-    });
+    };
+    socket.once('roomCreated', successHandler);
 
-    socket.once('createRoomError', (errorMessage) => {
-      setError(errorMessage);
+    socket.emit('createRoom', {
+      name: roomName,
+      description: roomDescription
     });
   };
 
   // ルーム入室
   const handleJoinRoom = (roomId) => {
-    if (!socket) return;
+    if (!socket) {
+      console.error('Socket is not available');
+      return;
+    }
+    
+    console.log('ルーム入室処理開始:', roomId);
     setJoinError(null);
     
-    // エラーハンドラーを設定
-    const errorHandler = (errorMessage) => {
-      setJoinError(errorMessage);
-      socket.off('joinRoomError', errorHandler);
-    };
-    socket.once('joinRoomError', errorHandler);
-    
+    // App.jsxのhandleJoinRoomを呼び出す（エラーハンドリングはApp.jsxで行う）
     onJoinRoom(roomId);
   };
 
