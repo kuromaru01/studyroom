@@ -131,15 +131,13 @@
   width: 320px;
   height: 320px;
   --radius: 138px; /* 数字配置用の半径（中心からの距離） */
-  --tick-radius: 156px; /* 目盛の半径（外周の内側） */
-  --tick-angle-offset: -2deg; /* わずかなズレを補正 */
   border-radius: 50%;
   background: radial-gradient(120% 120% at 30% 20%, #ffffff 0%, #eef4ff 70%, #dde9ff 100%);
   /* 枠線・内側ハイライトを削除してフラットに */
   box-shadow: 0 24px 40px rgba(11,93,255,0.18);
 }
 
-/* 目盛りリングを非表示にして枠感をなくす */
+/* 目盛りは非表示 */
 .analog-dial::before, .analog-dial::after { content: none; }
 
 .hand {
@@ -154,20 +152,7 @@
 .hand.second { width: 2px; height: 152px; background: #ff3b30; box-shadow: 0 2px 8px rgba(255,59,48,0.25); }
 .center-dot { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 12px; height: 12px; border-radius: 50%; background: #0b5dff; box-shadow: 0 0 0 3px #ffffff; }
 
-/* 目盛（60分） */
-.tick {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  /* 先端（外側）を円周に合わせ、内側へ伸びる */
-  transform: translate(-50%, -50%) rotate(calc(var(--angle) + var(--tick-angle-offset))) translateY(calc(-1 * var(--tick-radius)));
-  transform-origin: 50% 0%;
-  background: #2a8cff;
-  border-radius: 2px;
-  box-shadow: 0 1px 3px rgba(42,140,255,0.35);
-}
-.tick.minor { width: 2px; height: 8px; opacity: 0.85; }
-.tick.major { width: 4px; height: 16px; opacity: 0.95; }
+/* DOMベースの目盛は使用しない（背景で描画） */
 
 /* 数字（1〜12） */
 .analog-number {
@@ -188,18 +173,22 @@
 }
 
 @media (max-width: 1200px) {
-  .analog-dial { width: 280px; height: 280px; --radius: 126px; --tick-radius: 138px; --tick-angle-offset: -2deg; }
-  .tick.minor { height: 6px; }
-  .tick.major { height: 12px; }
+  .analog-dial {
+    width: 280px;
+    height: 280px;
+    --radius: 126px;
+  }
   .hand.hour { height: 84px; }
   .hand.minute { height: 124px; }
   .hand.second { height: 136px; }
 }
 
 @media (max-width: 840px) {
-  .analog-dial { width: 240px; height: 240px; --radius: 110px; --tick-radius: 118px; --tick-angle-offset: -2deg; }
-  .tick.minor { height: 5px; }
-  .tick.major { height: 10px; }
+  .analog-dial {
+    width: 240px;
+    height: 240px;
+    --radius: 110px;
+  }
   .hand.hour { height: 70px; }
   .hand.minute { height: 100px; }
   .hand.second { height: 116px; }
