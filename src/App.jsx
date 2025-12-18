@@ -1,12 +1,14 @@
 import LoginScreen from './components/LoginScreen'
+import RoomList from './components/RoomList'
 import Dashboard from './components/Dashboard'
 import { useState, useEffect } from 'react'
 import { io } from 'socket.io-client'
 import './App.css'
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [view, setView] = useState('login') // 'login' | 'roomList' | 'dashboard'
   const [currentNickname, setCurrentNickname] = useState('')
+  const [currentRoom, setCurrentRoom] = useState(null)
   const [members, setMembers] = useState([])
   const [socket, setSocket] = useState(null)
   const [joinError, setJoinError] = useState(null)
@@ -31,72 +33,85 @@ function App() {
       console.log(`${nickname}が退室しました`)
     })
 
-    // 入室エラーを受信
-    newSocket.on('joinError', (errorMessage) => {
-      setJoinError(errorMessage)
-    })
-
-    // 接続時に現在のメンバーリストを取得
-    newSocket.on('connect', () => {
-      newSocket.emit('getMembers')
-    })
-
     // クリーンアップ
     return () => {
       newSocket.close()
     }
   }, [])
 
+  // ニックネーム入力後の処理
   const handleLogin = (nickname) => {
-    // まずローカル状態を更新して画面遷移させる（ソケット未接続でも進む）
-    setJoinError(null)
     setCurrentNickname(nickname)
-    setIsLoggedIn(true)
-
-    // ソケットがあればサーバーと同期する
-    if (!socket) return
-
-    let hasError = false
-
-    const errorHandler = (errorMessage) => {
-      hasError = true
-      setJoinError(errorMessage)
-      socket.off('membersUpdate', updateHandler)
-    }
-    socket.once('joinError', errorHandler)
-
-    const updateHandler = (updatedMembers) => {
-      if (!hasError) {
-        setMembers(updatedMembers)
-      }
-      socket.off('membersUpdate', updateHandler)
-      socket.off('joinError', errorHandler)
-    }
-    socket.once('membersUpdate', updateHandler)
-
-    socket.emit('join', nickname)
+    setView('roomList')
   }
 
-  const handleLogout = () => {
-    // ソケットがあればサーバーへ通知、なくてもローカルでログアウト
-    if (socket) {
-      socket.emit('leave')
+  // ルーム入室処理
+  const handleJoinRoom = (roomId) => {
+    if (!socket) {
+      console.error('Socket is not available');
+      return;
     }
-    setCurrentNickname('')
+
+    console.log('ルーム入室処理開始:', roomId, 'ニックネーム:', currentNickname);
+    setJoinError(null)
+
+    // ルーム入室エラーハンドラー
+    const errorHandler = (errorMessage) => {
+      console.error('ルーム入室エラー:', errorMessage);
+      setJoinError(errorMessage)
+      socket.off('roomJoined', successHandler)
+    }
+    socket.once('joinRoomError', errorHandler)
+
+    // ルーム入室成功ハンドラー
+    const successHandler = (data) => {
+      console.log('ルーム入室成功:', data);
+      setCurrentRoom(data.room)
+      setMembers(data.members)
+      setView('dashboard')
+      socket.off('joinRoomError', errorHandler)
+    }
+    socket.once('roomJoined', successHandler)
+
+    // サーバーにルーム入室を通知
+    console.log('サーバーにルーム入室を送信:', { roomId, nickname: currentNickname });
+    socket.emit('joinRoom', {
+      roomId,
+      nickname: currentNickname
+    })
+  }
+
+  // ルーム退室処理
+  const handleLogout = () => {
+    if (!socket) return
+
+    // サーバーにルーム退室を通知
+    socket.emit('leaveRoom')
+    
+    setCurrentRoom(null)
     setMembers([])
-    setIsLoggedIn(false)
+    setView('roomList')
   }
 
   return (
     <>
-      {isLoggedIn ? (
+      {view === 'login' && (
+        <LoginScreen onLogin={handleLogin} error={joinError} />
+      )}
+      {view === 'roomList' && socket && (
+        <RoomList 
+          socket={socket}
+          nickname={currentNickname}
+          onJoinRoom={handleJoinRoom}
+        />
+      )}
+      {view === 'dashboard' && currentRoom && (
         <Dashboard 
           onLogout={handleLogout} 
           nickname={currentNickname}
           members={members}
+          room={currentRoom}
         />
-      ) : (
-        <LoginScreen onLogin={handleLogin} error={joinError} />
       )}
     </>
   )
