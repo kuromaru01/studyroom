@@ -44,9 +44,9 @@ export default function Dashboard() {
 
       {/* メインエリア */}
       <main className="max-w-7xl mx-auto px-6 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="flex flex-col items-center gap-6">
           {/* 現在のステータスカード */}
-          <div className="bg-white rounded-lg shadow-md p-6">
+          <div className="w-full max-w-2xl bg-white rounded-lg shadow-md p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">現在のステータス</h2>
             <div className="flex items-center justify-center h-32">
               <div className="text-center">
@@ -59,7 +59,7 @@ export default function Dashboard() {
           </div>
 
           {/* タスク入力カード */}
-          <div className="bg-white rounded-lg shadow-md p-6">
+          <div className="w-full max-w-2xl bg-white rounded-lg shadow-md p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">タスク追加</h2>
             <div className="flex flex-col gap-3">
               <input
@@ -95,7 +95,7 @@ export default function Dashboard() {
           </div>
 
           {/* タスク一覧カード */}
-          <div className="bg-white rounded-lg shadow-md p-6 lg:col-span-1">
+          <div className="w-full max-w-2xl bg-white rounded-lg shadow-md p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">タスク一覧</h2>
             <div className="space-y-3 max-h-[400px] overflow-y-auto">
               {tasks.length === 0 ? (
