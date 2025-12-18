@@ -10,6 +10,7 @@ function App() {
   const [currentNickname, setCurrentNickname] = useState('')
   const [currentRoom, setCurrentRoom] = useState(null)
   const [members, setMembers] = useState([])
+  const [memberStatuses, setMemberStatuses] = useState({})
   const [socket, setSocket] = useState(null)
   const [joinError, setJoinError] = useState(null)
 
@@ -31,6 +32,11 @@ function App() {
     // メンバーの退室通知を受信
     newSocket.on('memberLeft', (nickname) => {
       console.log(`${nickname}が退室しました`)
+    })
+
+    // メンバーのステータス更新を受信（全量）
+    newSocket.on('memberStatusesUpdate', (statuses) => {
+      setMemberStatuses(statuses || {})
     })
 
     // クリーンアップ
@@ -68,6 +74,7 @@ function App() {
       console.log('ルーム入室成功:', data);
       setCurrentRoom(data.room)
       setMembers(data.members)
+      setMemberStatuses(data.memberStatuses || {})
       setView('dashboard')
       socket.off('joinRoomError', errorHandler)
     }
@@ -111,6 +118,8 @@ function App() {
           nickname={currentNickname}
           members={members}
           room={currentRoom}
+          socket={socket}
+          memberStatuses={memberStatuses}
         />
       )}
     </>

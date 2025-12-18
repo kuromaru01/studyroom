@@ -17,7 +17,7 @@ const io = new Server(httpServer, {
 });
 
 // ルーム管理
-const rooms = new Map(); // roomId -> { id, name, description, createdAt, members: [] }
+const rooms = new Map(); // roomId -> { id, name, description, createdAt, members: [], memberStatuses: { [nickname]: boolean } }
 
 // 開発環境用のルートハンドラー
 app.get('/', (req, res) => {
@@ -61,7 +61,8 @@ io.on('connection', (socket) => {
       name: name.trim(),
       description: description ? description.trim() : '',
       createdAt: new Date().toISOString(),
-      members: []
+      members: [],
+      memberStatuses: {}
     };
 
     rooms.set(roomId, room);
@@ -124,6 +125,9 @@ io.on('connection', (socket) => {
     
     // メンバーリストに追加
     room.members.push(nickname);
+    // 初期ステータス（false: 学習中, true: 休憩中）
+    if (!room.memberStatuses) room.memberStatuses = {};
+    room.memberStatuses[nickname] = false;
     socket.roomId = roomId;
     socket.nickname = nickname;
 
@@ -135,12 +139,14 @@ io.on('connection', (socket) => {
         description: room.description,
         createdAt: room.createdAt
       },
-      members: room.members
+      members: room.members,
+      memberStatuses: room.memberStatuses
     });
 
     // ルーム内の全クライアントに通知
     io.to(roomId).emit('memberJoined', nickname);
     io.to(roomId).emit('membersUpdate', room.members);
+    io.to(roomId).emit('memberStatusesUpdate', room.memberStatuses);
 
     // ルーム一覧を更新
     const roomsList = Array.from(rooms.values()).map(r => ({
@@ -168,6 +174,10 @@ io.on('connection', (socket) => {
           // ルーム内の全クライアントに通知
           io.to(socket.roomId).emit('memberLeft', nickname);
           io.to(socket.roomId).emit('membersUpdate', room.members);
+          if (room.memberStatuses && room.memberStatuses[nickname] !== undefined) {
+            delete room.memberStatuses[nickname];
+            io.to(socket.roomId).emit('memberStatusesUpdate', room.memberStatuses);
+          }
 
           // ルーム一覧を更新
           const roomsList = Array.from(rooms.values()).map(r => ({
@@ -198,6 +208,17 @@ io.on('connection', (socket) => {
     }
   });
 
+  // タスク達成のブロードキャスト
+  socket.on('taskCompleted', (data) => {
+    const { roomId, nickname, text } = data || {};
+    if (!roomId || !nickname || !text) return;
+    const room = rooms.get(roomId);
+    if (!room) return;
+    // ルーム内の全クライアントに通知（達成ポップアップ）
+    io.to(roomId).emit('taskCompleted', { nickname, text });
+    console.log(`タスク達成: ${nickname} が「${text}」を達成 (room: ${roomId})`);
+  });
+
   // 切断処理
   socket.on('disconnect', () => {
     if (socket.roomId && socket.nickname) {
@@ -211,6 +232,10 @@ io.on('connection', (socket) => {
           // ルーム内の全クライアントに通知
           io.to(socket.roomId).emit('memberLeft', nickname);
           io.to(socket.roomId).emit('membersUpdate', room.members);
+          if (room.memberStatuses && room.memberStatuses[nickname] !== undefined) {
+            delete room.memberStatuses[nickname];
+            io.to(socket.roomId).emit('memberStatusesUpdate', room.memberStatuses);
+          }
 
           // ルーム一覧を更新
           const roomsList = Array.from(rooms.values()).map(r => ({
@@ -240,6 +265,21 @@ io.on('connection', (socket) => {
       }
     }
     console.log('ユーザーが切断しました:', socket.id);
+  });
+});
+
+// ユーザーステータス変更のブロードキャスト（学習中/休憩中）
+io.on('connection', (socket) => {
+  socket.on('statusChange', (data) => {
+    const { roomId, nickname, isBreak } = data || {};
+    if (!roomId || typeof isBreak !== 'boolean' || !nickname) return;
+    const room = rooms.get(roomId);
+    if (!room) return;
+    if (!room.members.includes(nickname)) return;
+    if (!room.memberStatuses) room.memberStatuses = {};
+    room.memberStatuses[nickname] = isBreak;
+    io.to(roomId).emit('memberStatusesUpdate', room.memberStatuses);
+    console.log(`ステータス変更: ${nickname} -> ${isBreak ? '休憩中' : '学習中'} (room: ${roomId})`);
   });
 });
 
