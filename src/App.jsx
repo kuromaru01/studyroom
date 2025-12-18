@@ -47,12 +47,17 @@ function App() {
 
   // ルーム入室処理
   const handleJoinRoom = (roomId) => {
-    if (!socket) return
+    if (!socket) {
+      console.error('Socket is not available');
+      return;
+    }
 
+    console.log('ルーム入室処理開始:', roomId, 'ニックネーム:', currentNickname);
     setJoinError(null)
 
     // ルーム入室エラーハンドラー
     const errorHandler = (errorMessage) => {
+      console.error('ルーム入室エラー:', errorMessage);
       setJoinError(errorMessage)
       socket.off('roomJoined', successHandler)
     }
@@ -60,6 +65,7 @@ function App() {
 
     // ルーム入室成功ハンドラー
     const successHandler = (data) => {
+      console.log('ルーム入室成功:', data);
       setCurrentRoom(data.room)
       setMembers(data.members)
       setView('dashboard')
@@ -68,6 +74,7 @@ function App() {
     socket.once('roomJoined', successHandler)
 
     // サーバーにルーム入室を通知
+    console.log('サーバーにルーム入室を送信:', { roomId, nickname: currentNickname });
     socket.emit('joinRoom', {
       roomId,
       nickname: currentNickname
