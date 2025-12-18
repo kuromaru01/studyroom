@@ -1,13 +1,16 @@
 import { LogOut, Users, User } from 'lucide-react';
 
-export default function Dashboard({ onLogout, nickname, members }) {
+export default function Dashboard({ onLogout, nickname, members, room }) {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* ヘッダー */}
       <header className="bg-white shadow">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <h1 className="text-xl font-bold text-gray-900">Study Room</h1>
+            <h1 className="text-xl font-bold text-gray-900">{room?.name || 'Study Room'}</h1>
+            {room?.description && (
+              <span className="text-sm text-gray-500 ml-2">- {room.description}</span>
+            )}
           </div>
 
           <div className="flex items-center gap-4">
